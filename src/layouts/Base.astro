@@ -1,0 +1,35 @@
+---
+import '../css/abstracts/variables.css';
+import '../css/base/fonts.css';
+import '../css/base/base.css';
+import '../css/components.css';
+import '../css/calculator.css';
+import { url } from '../lib/url.js';
+const { title, current = '' } = Astro.props;
+const full = title === 'Der kuratierte Teller' ? title : `${title} – Der kuratierte Teller`;
+const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezepte'], ['rechner', url('/#rechner'), 'Kalkulatoren']];
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <link rel="icon" href={url('/favicon.ico')} sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/favicon-32x32.png')} />
+    <link rel="icon" type="image/png" sizes="16x16" href={url('/favicon-16x16.png')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <link rel="manifest" href={url('/site.webmanifest')} />
+    <meta name="theme-color" content="#FAF7F1" />
+    <link rel="preload" href={url('/assets/fonts/Leggibilmente.woff2')} as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt springen</a>
+    <header class="wrap">
+      <nav class="nav" aria-label="Hauptnavigation">
+        {links.map(([k, href, label]) => <a href={href} aria-current={current === k ? 'page' : undefined}>{label}</a>)}
+      </nav>
+    </header>
+    <main id="main" class="wrap"><slot /></main>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { loadRecipes, tagBySlug, geschmackName } from '../../lib/recipes.js';
+import { url } from '../../lib/url.js';
+export async function getStaticPaths() {
+  return (await loadRecipes()).map((r) => ({ params: { slug: r.slug }, props: { r } }));
+}
+const { r } = Astro.props;
+---
+<Base title={r.title} current="rezepte">
+  <div class="page">
+    <p><a href={url('/#rezepte')}>← Alle Rezepte</a></p>
+    <h1>{r.title}</h1>
+    <ul class="meta">
+      <li>Portionen: {r.portionen}</li>
+      <li>Gesamtzeit: {r.gesamtzeit} Min.</li>
+      {r.aktivzeit && <li>Aktive Zeit: {r.aktivzeit} Min.</li>}
+      <li>{geschmackName[r.geschmack]}</li>
+    </ul>
+    <ul class="tags" style="justify-content:flex-start">
+      {r.eigenschaften.map((s) => <li class={`tag tag-${tagBySlug[s].farbe}`}>{tagBySlug[s].name}<span class="sr-only"> ({tagBySlug[s].gruppe})</span></li>)}
+    </ul>
+    {r.kategorien.length > 0 && <p>Kategorie: {r.kategorien.map((k) => k.title).join(', ')}</p>}
+
+    <h2>Zutaten</h2>
+    <div class="table-scroll">
+      <table class="recipe-table">
+        <caption class="sr-only">Zutaten für {r.portionen} Portion(en)</caption>
+        <thead><tr><th scope="col">Menge</th><th scope="col">Einheit</th><th scope="col">Zutat</th></tr></thead>
+        <tbody>
+          {r.ingredients.map((i) => <tr><td>{i.amount}</td><td>{i.unit}</td><th scope="row">{i.name}{i.note && `, ${i.note}`}</th></tr>)}
+        </tbody>
+      </table>
+    </div>
+
+    {r.cookware.length > 0 && <p><strong>Geräte:</strong> {r.cookware.join(', ')}</p>}
+
+    <h2>Zubereitung</h2>
+    <ol class="steps">{r.steps.map((s) => <li>{s}</li>)}</ol>
+  </div>
+</Base>

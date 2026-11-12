@@ -1,0 +1,14 @@
+{
+  "name": "der-kuratierte-teller",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@tmlmt/cooklang-parser": "^2.1.8",
+    "astro": "^7.4.11"
+  }
+}

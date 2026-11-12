@@ -1,0 +1,110 @@
+# Pages CMS (https://pagescms.org): bearbeitet die Dateien im Repo, es gibt keine Datenbank.
+# Hinweis: Nur nach der Doku zusammengestellt, noch nicht im CMS getestet.
+media:
+  input: src/assets/recipes
+  output: ../assets/recipes
+  categories: [image]
+
+content:
+  - name: recipes
+    label: Rezepte
+    type: collection
+    path: src/recipes
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+    fields:
+      - name: title
+        label: Titel
+        type: string
+        required: true
+      - name: geschmack
+        label: Geschmack
+        type: select
+        required: true
+        options:
+          values:
+            - name: suess
+              label: süss
+            - name: herzhaft
+              label: herzhaft
+      - name: eigenschaften
+        label: Eigenschaften (schnell wird bei 15 Minuten oder weniger automatisch gesetzt)
+        type: select
+        options:
+          multiple: true
+          values:
+            - name: laktosefrei
+              label: laktosefrei
+            - name: proteinreich
+              label: proteinreich
+            - name: low-carb
+              label: low-carb
+            - name: glutenfrei
+              label: glutenfrei
+            - name: vegetarisch
+              label: vegetarisch
+      - name: kategorien
+        label: Kategorien (optional)
+        type: reference
+        options:
+          collection: categories
+          multiple: true
+          value: "{primary}"
+          label: "{title}"
+      - name: gesamtzeit
+        label: Gesamtzeit in Minuten
+        type: number
+        required: true
+      - name: aktivzeit
+        label: Aktive Zeit in Minuten (optional)
+        type: number
+      - name: portionen
+        label: Portionen
+        type: number
+        required: true
+      - name: bild
+        label: Hauptbild (optional)
+        type: object
+        fields:
+          - name: datei
+            label: Bild
+            type: image
+            options:
+              media: recipes
+          - name: alt
+            label: Alt-Text (Pflicht, wenn ein Bild gewählt ist)
+            type: string
+      - name: body
+        label: Rezept in Cooklang
+        type: text
+
+  - name: categories
+    label: Kategorien (Serien)
+    type: collection
+    path: src/categories
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+    fields:
+      - name: title
+        label: Name
+        type: string
+        required: true
+      - name: kurztext
+        label: Kurztext
+        type: text
+      - name: bild
+        label: Titelbild (optional)
+        type: object
+        fields:
+          - name: datei
+            label: Bild
+            type: image
+            options:
+              media: recipes
+          - name: alt
+            label: Alt-Text
+            type: string

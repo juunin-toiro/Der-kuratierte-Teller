@@ -1,0 +1,14 @@
+.calc { margin-block: calc(var(--gap) * 2); }
+.calc-fields { display: flex; flex-wrap: wrap; gap: var(--gap); }
+.calc-field { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 12rem; }
+.calc-field.narrow { flex: 0 1 8rem; }
+.calc-field label { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.calc-field select, .calc-field input { font: inherit; padding: .6rem .75rem; background: var(--ink); color: var(--bg-color); border: 2px solid var(--ink); border-radius: 0; }
+.calc-field select:focus-visible, .calc-field input:focus-visible { outline-color: var(--accent-color); outline-offset: 2px; box-shadow: 0 0 0 5px var(--ink); }
+.gauge { display: block; width: min(100%, 16rem); margin: var(--gap) auto 0; }
+.gauge .track { fill: none; stroke: var(--stardust); stroke-width: 14; stroke-linecap: round; opacity: .5; }
+.gauge .needle { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; transform-origin: 120px 120px; transition: transform .6s; }
+.gauge text { font: 700 .7rem var(--f-family); fill: var(--ink); letter-spacing: .08em; }
+.calc-result { border-top: 1.5px solid var(--ink); padding-top: var(--gap); font-size: 1.25rem; max-width: 40rem; }
+.calc-result strong { font-weight: 700; }
+.calc-result .level { text-decoration: underline 3px var(--accent-color); text-underline-offset: .25em; }

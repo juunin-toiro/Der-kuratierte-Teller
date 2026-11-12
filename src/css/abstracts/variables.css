@@ -1,0 +1,16 @@
+:root {
+  --ink: #44414F;
+  --bg-color: #FAF7F1;
+  --accent-color: #EFBC3A;
+  --yellow-white: #F4E7BC;
+  --green: #70B386;
+  --orange: #E3878D;
+  --stardust: #9F9F9C;
+
+  --f-family: "Leggibilmente", system-ui, sans-serif;
+  --f-heading: "Aleo", Georgia, serif;
+
+  --gap: 1.5rem;
+}
+@media (min-width: 576px) { :root { --gap: 2rem; } }
+@media (min-width: 992px) { :root { --gap: 3rem; } }

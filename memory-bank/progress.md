@@ -9,4 +9,29 @@
 - [ ] Validate contrast and keyboard accessibility.
 - [ ] Establish verified nutrition data provenance.
 
+## 2026-11-12 — MVP v0 (slim)
+- [x] Repo audited (only docs existed); Astro 7 + plain CSS + npm approved.
+- [x] Static build works (`npm run build`, 4 pages).
+- [x] Tokens, self-hosted fonts (Leggibilmente 400/400i/500/700, Aleo VF + italic VF in `public/assets/fonts/`).
+- [x] Mini Cooklang parser (`src/lib/cooklang.js`), 3 sample recipes, hex cards, JS-only tag filter, recipe table page, bee button.
+- [ ] Not verified: contrast, focus on hex cards, keyboard, print, screen reader (no browser check yet).
+- [ ] Fonts are OTF/TTF, not subset/woff2. Bee scrolls to recipes (no calculator in MVP). No nutrition values by design.
+
+## 2026-11-12 — Start page, calculator, favicon
+- [x] Hero (plate image), bee button (scrolls to calculator and focuses it), favicon set + manifest from user files. Nav: Home, Rezepte, Kalkulatoren (Wissenswertes/About pages do not exist yet).
+- [x] Leggibilmente is now one `Leggibilmente.woff2` (weight axis verified in browser: 400/500/700 differ; no real italic, browser synthesizes it).
+- [x] Smart-Fuel Rechner (glycemic load per portion), heading in ink. Bands <=10 / 11-19 / >=20 are the standard GL bands.
+- [ ] OPEN: `src/data/foods.json` holds ONE entry from the user's screenshot (GL 19.0/100 g, no source). Needs real food data (GI, carbs, source) and the recommendation rule (protein/fat scaling is an assumption: linear per 100 g).
+- [ ] Contrast and keyboard checks still pending.
+
+## 2026-11-12 — Step 1 and 2 of plan (recipe model, filters, CMS config)
+- [x] Recipes are `src/recipes/*.md` (YAML frontmatter + Cooklang body), categories `src/categories/*.md`, validated by Zod in `src/content.config.ts`; tags in `src/data/tags.json`.
+- [x] Parser: `@tmlmt/cooklang-parser` (official WASM `@cooklang/cooklang` fails in Astro/Node build: unknown `.wasm` extension). The old mini parser and `.cook` files are removed.
+- [x] Filters: Geschmack (single), Eigenschaften (AND, `schnell` automatic at <=15 min total), Kategorie dropdown (OR). Checked in the browser with JS clicks; honeycomb rows offset by `src/scripts/filters.js`.
+- [x] Invalid frontmatter stops the build with a German-readable list per file (verified with a bad test file).
+- [x] `.pages.yml` (Pages CMS) and `.github/workflows/deploy.yml` (GitHub Pages) written; base path via `SITE`/`BASE` env, links via `src/lib/url.js`.
+- [ ] NOT verified: Pages CMS config has never been loaded in the CMS (keys `required`, select `multiple`, reference `value`/`label`, image `output` relative path are from docs only). Deploy workflow not run (needs push + Settings > Pages > Source: GitHub Actions).
+- [ ] Not done yet: steps 3 and 4 of the plan (blog, about, sources, start page list; food table, calculator data, computed nutrition and GL). Calculator still uses the single placeholder entry in `src/data/foods.json`.
+- [ ] Contrast, keyboard and screen reader checks still pending. Max 3 honeycomb columns (2 below 480 px).
+
 **Note:** Documentation completion does not mean application code exists or has been tested.

@@ -1,0 +1,122 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import hero from '../assets/hero-plate.webp';
+import bee from '../assets/bee.png';
+import foods from '../data/foods.json';
+import { loadRecipes, tags, tagBySlug } from '../lib/recipes.js';
+import { url } from '../lib/url.js';
+const recipes = await loadRecipes();
+// Nur Kategorien anzeigen, die mindestens ein Rezept haben.
+const kategorien = [...new Map(recipes.flatMap((r) => r.kategorien).map((k) => [k.slug, k])).values()]
+  .sort((a, b) => a.title.localeCompare(b.title, 'de'));
+---
+<Base title="Der kuratierte Teller" current="home">
+  <section class="hero" aria-labelledby="hero-h">
+    <Image src={hero} alt="Sechseckiger Teller aus hellem Stein mit einer Biene in der Mitte" width={480} loading="eager" class="hero-img" />
+    <h1 id="hero-h">Der kuratierte Teller</h1>
+    <p class="lead">Bunte Ernährung für Bewusste, Bewegte &amp; Beschäftigte</p>
+    <button class="bee" type="button" id="bee" aria-label="Zum Smart-Fuel Rechner scrollen">
+      <Image src={bee} alt="" width={128} />
+    </button>
+  </section>
+
+  <section id="rechner" class="calc" aria-labelledby="rechner-h">
+    <h2 id="rechner-h">Der Smart-Fuel Rechner</h2>
+    <noscript><p>Der Rechner braucht JavaScript.</p></noscript>
+    <form class="calc-fields" id="calc" onsubmit="return false">
+      <div class="calc-field">
+        <label for="food">Lebensmittel wählen</label>
+        <select id="food">{foods.map((f, i) => <option value={i}>{f.name}</option>)}</select>
+      </div>
+      <div class="calc-field narrow">
+        <label for="grams">Portion in g</label>
+        <input id="grams" type="number" inputmode="decimal" min="1" max="2000" step="1" value="100" />
+      </div>
+    </form>
+    <svg class="gauge" viewBox="0 0 240 150" aria-hidden="true" focusable="false">
+      <path class="track" d="M 20 120 A 100 100 0 0 1 220 120" />
+      <line class="needle" id="needle" x1="120" y1="120" x2="120" y2="40" />
+      <text x="20" y="145">NIEDRIG</text>
+      <text x="220" y="145" text-anchor="end">HOCH</text>
+    </svg>
+    <p class="calc-result" id="result" role="status" aria-live="polite"></p>
+    <script type="application/json" id="foods-data" set:html={JSON.stringify(foods)} />
+  </section>
+
+  <section id="rezepte" aria-labelledby="rezepte-h">
+    <h2 id="rezepte-h">Rezepte</h2>
+    <div class="filters" id="filters" hidden>
+      <div class="filter-row" role="group" aria-label="Geschmack" data-group="geschmack">
+        <button class="filter" type="button" aria-pressed="true" data-value="">Alle</button>
+        {tags.geschmack.map((t) => <button class="filter" type="button" aria-pressed="false" data-value={t.slug}>{t.name}</button>)}
+      </div>
+      <div class="filter-row" role="group" aria-label="Eigenschaften" data-group="eigenschaften">
+        {tags.eigenschaften.map((t) => <button class={`filter c-${t.farbe}`} type="button" aria-pressed="false" data-value={t.slug}>{t.name}</button>)}
+      </div>
+      {kategorien.length > 0 && (
+        <div class="filter-row">
+          <details class="dropdown" id="kat">
+            <summary class="filter">Kategorie</summary>
+            <fieldset class="dropdown-panel" data-group="kategorien">
+              <legend class="sr-only">Kategorie wählen</legend>
+              {kategorien.map((k) => <label><input type="checkbox" value={k.slug} />{k.title}</label>)}
+            </fieldset>
+          </details>
+          <button class="reset" type="button" id="reset">Filter zurücksetzen</button>
+        </div>
+      )}
+    </div>
+    <p id="status" role="status" aria-live="polite"></p>
+    <ul class="honeycomb" id="list">
+      {recipes.map((r) => (
+        <li class="hex-wrap" data-geschmack={r.geschmack} data-eigenschaften={r.eigenschaften.join(',')} data-kategorien={r.kategorien.map((k) => k.slug).join(',')}>
+          <a class="hex" href={url(`/rezepte/${r.slug}/`)}>
+            <h3>{r.title}</h3>
+            <ul class="tags">
+              {r.eigenschaften.map((s) => <li class={`tag tag-${tagBySlug[s].farbe}`}>{tagBySlug[s].name}<span class="sr-only"> ({tagBySlug[s].gruppe})</span></li>)}
+            </ul>
+            <p class="time">{r.gesamtzeit} Min.</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="empty" id="empty" hidden>Kein Rezept passt zu dieser Auswahl.</p>
+  </section>
+
+  <script>
+    document.getElementById('bee').addEventListener('click', () => {
+      const t = document.getElementById('rechner');
+      t.scrollIntoView();
+      t.querySelector('select').focus({ preventScroll: true });
+    });
+
+    // Glycemic load = GL per 100 g scaled linearly to the portion. Bands: <=10 low, 11-19 medium, >=20 high (standard GL bands).
+    const foods = JSON.parse(document.getElementById('foods-data').textContent);
+    const sel = document.getElementById('food');
+    const grams = document.getElementById('grams');
+    const out = document.getElementById('result');
+    const needle = document.getElementById('needle');
+    const fmt = (n) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    function calc() {
+      const f = foods[sel.value];
+      const g = Number(grams.value);
+      if (!f || !(g > 0)) { out.textContent = 'Bitte eine Portion in Gramm eingeben.'; return; }
+      const gl = (f.glPer100g * g) / 100;
+      const level = gl <= 10 ? 'niedrige' : gl < 20 ? 'mittlere' : 'hohe';
+      needle.style.transform = `rotate(${(Math.min(gl, 40) / 40) * 180 - 90}deg)`;
+      const k = g / 100;
+      const s = f.supplementPer100g;
+      out.innerHTML = '';
+      const b = (t) => Object.assign(document.createElement('strong'), { textContent: t });
+      const lv = Object.assign(document.createElement('strong'), { className: 'level', textContent: `${level} glykämische Last von ${fmt(gl)}` });
+      out.append(b(`${g}g ${f.name}`), ' haben eine ', lv, '.');
+      if (s) out.append(document.createElement('br'), 'Ergänze die Portion mit ', b(`${fmt(s.protein * k)}g Protein`), ' und ', b(`${fmt(s.fat * k)}g Fett`), ', um deine Blutzuckerspitze abzuflachen.');
+    }
+    sel.addEventListener('change', calc);
+    grams.addEventListener('input', calc);
+    calc();
+
+    import '../scripts/filters.js';
+  </script>
+</Base>

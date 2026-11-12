@@ -26,7 +26,7 @@ Text only ink on light surfaces or bg on ink. No colored text in accent/green/or
 - `--gap`: 1.5rem default, 2rem from 576px, 3rem from 992px.
 
 ## Components
-- Hex recipe card: no photo; ink surface, centered bg title/tags. Category chip border: orange for protein-rich/keto/low-carb; accent for 15min/brainfood/quick; green for lactose-free/gluten-free/blood-sugar-friendly. Do not rely on border color alone to convey category.
+- Hex recipe card: no photo; ink surface, centered bg title/tags. Chip border colours (UPDATED 2026-11-12, D-007): green for Ernährung (proteinreich, low-carb, vegetarisch); orange for Verträglichkeit (laktosefrei, glutenfrei); accent for Zeit (schnell). Group name is also given as screen-reader text; never rely on border colour alone.
 - Navigation: ink, active/hover bold with 3px accent underline.
 - Bee: 64px centered; hover rotation 180 degrees over 0.8s; scroll to calculator. Also support keyboard activation and reduced motion.
 - Filters: inactive bg + 1.5px ink border; hover yellow-white; active ink/bg. Expose active state semantically.

@@ -1,0 +1,4 @@
+/* Leggibilmente.woff2 is one file; weight range and italic are checked in the browser (see progress.md). */
+@font-face { font-family: "Leggibilmente"; src: url("/assets/fonts/Leggibilmente.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Aleo"; src: url("/assets/fonts/Aleo-VF.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Aleo"; src: url("/assets/fonts/Aleo-Italic-VF.ttf") format("truetype"); font-weight: 100 900; font-style: italic; font-display: swap; }

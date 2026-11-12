@@ -1,0 +1,4 @@
+---
+title: Salate
+kurztext: ''
+---
