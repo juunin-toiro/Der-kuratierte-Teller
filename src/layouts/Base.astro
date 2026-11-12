@@ -7,7 +7,7 @@ import '../css/calculator.css';
 import { url } from '../lib/url.js';
 const { title, current = '' } = Astro.props;
 const full = title === 'Der kuratierte Teller' ? title : `${title} – Der kuratierte Teller`;
-const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezepte'], ['rechner', url('/#rechner'), 'Kalkulatoren']];
+const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezepte'], ['wissenswertes', url('/wissenswertes/'), 'Wissenswertes'], ['about', url('/about/'), 'About']];
 ---
 <!doctype html>
 <html lang="de">

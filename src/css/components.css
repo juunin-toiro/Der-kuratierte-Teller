@@ -21,9 +21,10 @@
 .filter { font: inherit; font-family: var(--f-heading); cursor: pointer; border-radius: .5rem; padding: .5rem 1rem; background: var(--bg-color); color: var(--ink); border: 1.5px solid var(--ink); }
 .filter:hover { background: var(--yellow-white); text-decoration: underline; }
 .filter[aria-pressed="true"] { background: var(--ink); color: var(--bg-color); }
-.filter.c-green { box-shadow: inset 0 -5px 0 var(--green); }
-.filter.c-orange { box-shadow: inset 0 -5px 0 var(--orange); }
-.filter.c-accent { box-shadow: inset 0 -5px 0 var(--accent-color); }
+.filter[class*="c-"]::before { content: ""; display: inline-block; width: .65rem; height: .65rem; margin-right: .5rem; border-radius: 50%; border: 1.5px solid currentColor; background: var(--dot); }
+.filter.c-green { --dot: var(--green); }
+.filter.c-orange { --dot: var(--orange); }
+.filter.c-accent { --dot: var(--accent-color); }
 .dropdown { position: relative; }
 .dropdown summary { list-style: none; display: inline-block; }
 .dropdown summary::-webkit-details-marker { display: none; }
