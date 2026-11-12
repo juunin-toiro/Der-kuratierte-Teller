@@ -35,3 +35,11 @@
 - [ ] Contrast, keyboard and screen reader checks still pending. Max 3 honeycomb columns (2 below 480 px).
 
 **Note:** Documentation completion does not mean application code exists or has been tested.
+
+## 2026-11-12 — Step 3 (blog, About, Quellen, start page)
+- [x] Nav fixed to Home, Rezepte, Wissenswertes, About (no Kalkulatoren). Colour cue on filters is a dot, not a border.
+- [x] Collections `posts` (title, teaser, optional kategorie, hidden sort `datum`, `quellen`), `quellen` (title, autor, jahr, link), `seiten` (About). Recipes got optional `quellen`. Sources are referenced by title; a missing title stops the build with a German message. Numbering = order of the list.
+- [x] Pages: /wissenswertes/ (list), /wissenswertes/<slug>/, /about/ (user's own text), /quellen/ (central list, footer link). Start page: hero, intro placeholder, calculator, recipes, newest 3 posts (no date) with link "Alle Beiträge".
+- [x] `.pages.yml` extended (posts, quellen, seiten) — still untested in the CMS. Build: 8 pages OK.
+- [ ] Placeholders to replace: intro text on start page, first post (`src/posts/platzhalter-erster-beitrag.md`), source (`src/quellen/platzhalter-quelle.md`). Series/Kategorie landing pages for posts not built. Inline footnote markers are not automatic.
+- [ ] Not checked: visual result in the browser, contrast, keyboard.

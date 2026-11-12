@@ -61,3 +61,11 @@
 .recipe-table th { font-family: var(--f-heading); }
 .steps li { margin-bottom: 1rem; }
 .meta { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--gap); }
+
+/* Beiträge, Einstiegstext, Footer */
+.intro { text-align: center; max-width: 40rem; margin-inline: auto; }
+.posts { list-style: none; margin: 0 0 var(--gap); padding: 0; display: grid; gap: var(--gap); }
+.posts h3 { margin: 0; }
+.posts p { margin: .25rem 0 0; }
+.post-kat { font-size: .875rem; font-family: var(--f-heading); }
+.site-footer { margin-block: calc(var(--gap) * 2) var(--gap); }

@@ -76,6 +76,14 @@ content:
           - name: alt
             label: Alt-Text (Pflicht, wenn ein Bild gewählt ist)
             type: string
+      - name: quellen
+        label: Quellen (optional)
+        type: reference
+        options:
+          collection: quellen
+          multiple: true
+          value: "{primary}"
+          label: "{title}"
       - name: body
         label: Rezept in Cooklang
         type: text
@@ -108,3 +116,79 @@ content:
           - name: alt
             label: Alt-Text
             type: string
+
+  - name: posts
+    label: Wissenswertes (Blog)
+    type: collection
+    path: src/posts
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+    fields:
+      - name: title
+        label: Titel
+        type: string
+        required: true
+      - name: teaser
+        label: Teaser (ein bis zwei Sätze)
+        type: text
+        required: true
+      - name: kategorie
+        label: Kategorie (optional, z. B. Brainfood)
+        type: string
+      - name: datum
+        label: Sortierdatum (wird nicht angezeigt)
+        type: date
+        required: true
+      - name: quellen
+        label: Quellen (Titel, in Reihenfolge der Nummerierung)
+        type: reference
+        options:
+          collection: quellen
+          multiple: true
+          value: "{primary}"
+          label: "{title}"
+      - name: body
+        label: Text
+        type: rich-text
+
+  - name: quellen
+    label: Quellen
+    type: collection
+    path: src/quellen
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+    fields:
+      - name: title
+        label: Titel der Quelle
+        type: string
+        required: true
+      - name: autor
+        label: Autor oder Organisation
+        type: string
+      - name: jahr
+        label: Jahr
+        type: number
+      - name: link
+        label: Link (https://…)
+        type: string
+
+  - name: seiten
+    label: Seiten (About)
+    type: collection
+    path: src/seiten
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+    fields:
+      - name: title
+        label: Titel
+        type: string
+        required: true
+      - name: body
+        label: Text
+        type: rich-text

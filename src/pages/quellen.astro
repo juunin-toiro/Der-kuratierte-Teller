@@ -1,0 +1,15 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+const quellen = (await getCollection('quellen')).map((q) => q.data).sort((a, b) => a.title.localeCompare(b.title, 'de'));
+---
+<Base title="Quellen" current="">
+  <article class="page">
+    <h1>Quellen</h1>
+    <ul>
+      {quellen.map((q) => (
+        <li>{q.link ? <a href={q.link}>{q.title}</a> : q.title}{q.autor && `, ${q.autor}`}{q.jahr && ` (${q.jahr})`}</li>
+      ))}
+    </ul>
+  </article>
+</Base>

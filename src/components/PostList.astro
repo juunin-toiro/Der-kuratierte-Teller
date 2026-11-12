@@ -1,0 +1,13 @@
+---
+import { url } from '../lib/url.js';
+const { posts } = Astro.props;
+---
+<ul class="posts">
+  {posts.map((p) => (
+    <li>
+      <h3><a href={url(`/wissenswertes/${p.slug}/`)}>{p.title}</a></h3>
+      {p.kategorie && <p class="post-kat">{p.kategorie}</p>}
+      <p>{p.teaser}</p>
+    </li>
+  ))}
+</ul>

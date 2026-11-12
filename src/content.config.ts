@@ -20,7 +20,37 @@ const recipes = defineCollection({
       aktivzeit: z.number().int().positive().optional(),
       portionen: z.number().int().positive(),
       bild: z.object({ datei: image(), alt: z.string().min(1) }).optional(),
+      quellen: z.array(z.string()).default([]),
     }),
+});
+
+// Blogbeiträge (Wissenswertes). Das Datum dient nur der Sortierung und wird nicht angezeigt.
+const posts = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/posts' }),
+  schema: z.object({
+    title: z.string().min(1),
+    teaser: z.string().min(1),
+    kategorie: z.string().optional(),
+    datum: z.coerce.date(),
+    quellen: z.array(z.string()).default([]),
+  }),
+});
+
+// Quellen; Beiträge und Rezepte nennen sie über den Titel. Nummeriert wird in der Reihenfolge der Nennung.
+const quellen = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/quellen' }),
+  schema: z.object({
+    title: z.string().min(1),
+    autor: z.string().optional(),
+    jahr: z.number().int().optional(),
+    link: z.string().url().optional(),
+  }),
+});
+
+// Einzelseiten mit Fließtext (derzeit: About).
+const seiten = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/seiten' }),
+  schema: z.object({ title: z.string().min(1) }),
 });
 
 const categories = defineCollection({
@@ -33,4 +63,4 @@ const categories = defineCollection({
     }),
 });
 
-export const collections = { recipes, categories };
+export const collections = { recipes, categories, posts, quellen, seiten };

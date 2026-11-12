@@ -4,9 +4,12 @@ import Base from '../layouts/Base.astro';
 import hero from '../assets/hero-plate.webp';
 import bee from '../assets/bee.png';
 import foods from '../data/foods.json';
+import PostList from '../components/PostList.astro';
 import { loadRecipes, tags, tagBySlug } from '../lib/recipes.js';
+import { loadPosts } from '../lib/posts.js';
 import { url } from '../lib/url.js';
 const recipes = await loadRecipes();
+const neueste = (await loadPosts()).slice(0, 3);
 // Nur Kategorien anzeigen, die mindestens ein Rezept haben.
 const kategorien = [...new Map(recipes.flatMap((r) => r.kategorien).map((k) => [k.slug, k])).values()]
   .sort((a, b) => a.title.localeCompare(b.title, 'de'));
@@ -19,6 +22,7 @@ const kategorien = [...new Map(recipes.flatMap((r) => r.kategorien).map((k) => [
     <button class="bee" type="button" id="bee" aria-label="Zum Smart-Fuel Rechner scrollen">
       <Image src={bee} alt="" width={128} />
     </button>
+    <p class="intro">Einstiegstext folgt.</p>
   </section>
 
   <section id="rechner" class="calc" aria-labelledby="rechner-h">
@@ -83,6 +87,14 @@ const kategorien = [...new Map(recipes.flatMap((r) => r.kategorien).map((k) => [
     </ul>
     <p class="empty" id="empty" hidden>Kein Rezept passt zu dieser Auswahl.</p>
   </section>
+
+  {neueste.length > 0 && (
+    <section id="wissenswertes" aria-labelledby="blog-h">
+      <h2 id="blog-h">Neueste Beiträge</h2>
+      <PostList posts={neueste} />
+      <p><a href={url('/wissenswertes/')}>Alle Beiträge</a></p>
+    </section>
+  )}
 
   <script>
     document.getElementById('bee').addEventListener('click', () => {

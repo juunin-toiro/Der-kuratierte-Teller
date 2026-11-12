@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Quellen from '../../components/Quellen.astro';
 import { loadRecipes, tagBySlug, geschmackName } from '../../lib/recipes.js';
 import { url } from '../../lib/url.js';
 export async function getStaticPaths() {
@@ -37,5 +38,6 @@ const { r } = Astro.props;
 
     <h2>Zubereitung</h2>
     <ol class="steps">{r.steps.map((s) => <li>{s}</li>)}</ol>
+    <Quellen titel={r.quellen} />
   </div>
 </Base>

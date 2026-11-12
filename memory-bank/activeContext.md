@@ -1,16 +1,16 @@
 # Active context — 2026-11-12
 ## Current focus
-Steps 1 and 2 of the agreed plan are built (recipe model, filters, honeycomb, Pages CMS config, GitHub Pages workflow). Nothing is committed or deployed yet.
+Steps 1-3 of the agreed plan are built (recipes, filters, CMS config, blog, About, Quellen, start page). Step 4 waits for the new Excel.
 
 ## Plan (agreed with the user)
 1. DONE: recipe model with Cooklang, filters, honeycomb.
 2. DONE in files, UNTESTED in the services: `.pages.yml` and `.github/workflows/deploy.yml`.
-3. TODO: blog (Wissenswertes, newest 3 on start page, no date shown), About me, Quellen (numbered footnotes + central page), start page order: hero, short intro text (user writes it), calculator, recipes, blog list.
+3. DONE (placeholders remain): blog, About (user text), Quellen, start page order. Missing: intro text, first real post, real sources.
 4. TODO after the user sends the new Excel: Lebensmittel collection, nutrient catalogue, calculator on the new data (combobox search), computed nutrition and GL per recipe. See D-008.
 
 ## Waiting on the user
 - New Excel replacing `data-review/lebensmittel-pruefung.xlsx` (columns: name, name variants, GI, Zustand, KH brutto, Ballaststoffe, nutrients, density, per-unit grams, source). Check its columns against the nutrient catalogue first.
-- Intro text for the start page, About me text, sources.
+- Intro text for the start page, sources. (About text received.)
 - GitHub: push, then Settings > Pages > Source "GitHub Actions"; decide custom domain vs `github.io/<repo>`.
 
 ## Open / unverified

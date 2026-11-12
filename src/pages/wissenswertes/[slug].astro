@@ -1,0 +1,21 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Quellen from '../../components/Quellen.astro';
+import { loadPosts } from '../../lib/posts.js';
+import { url } from '../../lib/url.js';
+export async function getStaticPaths() {
+  return (await loadPosts()).map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props;
+const { Content } = await render(p.entry);
+---
+<Base title={p.title} current="wissenswertes">
+  <article class="page">
+    <p><a href={url('/wissenswertes/')}>← Alle Beiträge</a></p>
+    <h1>{p.title}</h1>
+    {p.kategorie && <p class="post-kat">{p.kategorie}</p>}
+    <Content />
+    <Quellen titel={p.quellen} />
+  </article>
+</Base>

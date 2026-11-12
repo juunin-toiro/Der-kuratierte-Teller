@@ -1,0 +1,10 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { loadPosts } from '../../lib/posts.js';
+const posts = await loadPosts();
+---
+<Base title="Wissenswertes" current="wissenswertes">
+  <h1>Wissenswertes</h1>
+  {posts.length > 0 ? <PostList posts={posts} /> : <p>Hier erscheinen bald die Beiträge.</p>}
+</Base>

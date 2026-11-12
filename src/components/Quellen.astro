@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+const { titel = [] } = Astro.props;
+const alle = await getCollection('quellen');
+const liste = titel.map((t) => {
+  const q = alle.find((x) => x.data.title === t);
+  if (!q) throw new Error(`Quelle "${t}" fehlt. Bitte unter "Quellen" anlegen oder den Namen korrigieren.`);
+  return q.data;
+});
+---
+{liste.length > 0 && (
+  <section aria-labelledby="quellen-h">
+    <h2 id="quellen-h">Quellen</h2>
+    <ol>
+      {liste.map((q) => (
+        <li>{q.link ? <a href={q.link}>{q.title}</a> : q.title}{q.autor && `, ${q.autor}`}{q.jahr && ` (${q.jahr})`}</li>
+      ))}
+    </ol>
+  </section>
+)}
