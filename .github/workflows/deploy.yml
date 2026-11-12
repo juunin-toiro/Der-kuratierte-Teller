@@ -24,6 +24,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run check
       # Ohne eigene Domain liegt die Seite unter /<repo-name>. Mit eigener Domain SITE setzen und BASE entfernen.
       - run: npm run build
         env:
