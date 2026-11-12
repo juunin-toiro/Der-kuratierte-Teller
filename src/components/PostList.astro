@@ -1,5 +1,7 @@
 ---
-import { url } from '../lib/url.js';
+import { url } from '../lib/url';
+import type { loadPosts } from '../lib/posts';
+interface Props { posts: Awaited<ReturnType<typeof loadPosts>> }
 const { posts } = Astro.props;
 ---
 <ul class="posts">

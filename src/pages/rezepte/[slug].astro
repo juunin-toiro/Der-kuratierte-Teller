@@ -1,8 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Quellen from '../../components/Quellen.astro';
-import { loadRecipes, tagBySlug, geschmackName } from '../../lib/recipes.js';
-import { url } from '../../lib/url.js';
+import { loadRecipes, tagBySlug, geschmackName } from '../../lib/recipes';
+import { url } from '../../lib/url';
 export async function getStaticPaths() {
   return (await loadRecipes()).map((r) => ({ params: { slug: r.slug }, props: { r } }));
 }

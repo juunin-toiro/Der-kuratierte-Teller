@@ -4,7 +4,7 @@ import '../css/base/fonts.css';
 import '../css/base/base.css';
 import '../css/components.css';
 import '../css/calculator.css';
-import { url } from '../lib/url.js';
+import { url } from '../lib/url';
 const { title, current = '' } = Astro.props;
 const full = title === 'Der kuratierte Teller' ? title : `${title} – Der kuratierte Teller`;
 const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezepte'], ['wissenswertes', url('/wissenswertes/'), 'Wissenswertes'], ['about', url('/about/'), 'About']];

@@ -2,6 +2,7 @@
 import { getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 const about = await getEntry('seiten', 'about');
+if (!about) throw new Error('src/seiten/about.md fehlt.');
 const { Content } = await render(about);
 ---
 <Base title={about.data.title} current="about">

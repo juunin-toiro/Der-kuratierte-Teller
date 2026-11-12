@@ -40,3 +40,7 @@ Nutrients and GL per recipe are computed from ingredients linked to Lebensmittel
 
 ## D-009 — Hosting
 Date: 2026-11-12 | Status: PROPOSED/started — GitHub Pages via GitHub Actions; custom domain, cost and limits not verified.
+
+## D-010 — TypeScript
+Date: 2026-11-12 | Status: CONFIRMED by user ("ja, TypeScript").
+All project scripts are TypeScript (`src/lib/*.ts`, `src/scripts/filters.ts`, inline script in `index.astro`); `astro.config.mjs` stays `.mjs`. Dev dependencies `typescript` and `@astrojs/check`; `tsconfig.json` extends `astro/tsconfigs/strict`. Run `npm run check` before commits. New code (nutrition, GL) is written typed from the start.

@@ -1,26 +1,26 @@
 import { getCollection } from 'astro:content';
-import { Recipe } from '@tmlmt/cooklang-parser';
+import { Recipe, type DecimalValue, type FractionValue, type Ingredient, type Timer } from '@tmlmt/cooklang-parser';
 import tags from '../data/tags.json';
 
 const nf = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 2 });
-const one = (v) => (v.type === 'decimal' ? nf.format(v.value) : `${v.num}/${v.den}`);
+const one = (v: DecimalValue | FractionValue) => (v.type === 'decimal' ? nf.format(v.value) : `${v.num}/${v.den}`);
 
-function amount(q) {
+function amount(q?: Ingredient['quantity'] | Timer['duration']): string {
   if (!q) return '';
   if (q.type === 'range') return `${one(q.min)}–${one(q.max)}`;
   return q.value.type === 'text' ? q.value.value : one(q.value);
 }
 
 // Cooklang-Text -> Zutatenliste, Geräte und Schritte als Klartext.
-function parseBody(body, id) {
-  let r;
+function parseBody(body: string, id: string) {
+  let r: Recipe;
   try {
     r = new Recipe(body);
   } catch (e) {
-    throw new Error(`Rezept "${id}": Cooklang-Text nicht lesbar: ${e.message}`);
+    throw new Error(`Rezept "${id}": Cooklang-Text nicht lesbar: ${(e as Error).message}`);
   }
   const ingredients = r.ingredients.map((i) => ({ name: i.name, amount: amount(i.quantity), unit: i.unit ?? '', note: i.preparation ?? '' }));
-  const timer = (t) => `${amount(t.duration)} ${t.unit ?? ''}`.trim();
+  const timer = (t: Timer) => `${amount(t.duration)} ${t.unit ?? ''}`.trim();
   const steps = r.sections.flatMap((s) => s.content).filter((c) => c.type === 'step').map((s) =>
     s.items.map((it) => {
       if (it.type === 'text') return it.value;
@@ -37,7 +37,7 @@ function parseBody(body, id) {
 export async function loadRecipes() {
   const [entries, cats] = await Promise.all([getCollection('recipes'), getCollection('categories')]);
   const catTitle = Object.fromEntries(cats.map((c) => [c.id, c.data.title]));
-  const slugify = (s) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s+/g, '-');
+  const slugify = (s: string) => s.toLowerCase().trim().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s+/g, '-');
   const catBySlug = Object.fromEntries(cats.map((c) => [slugify(c.id), c.id]));
   return entries
     .map((e) => {

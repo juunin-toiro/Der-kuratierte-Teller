@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
-import { loadPosts } from '../../lib/posts.js';
+import { loadPosts } from '../../lib/posts';
 const posts = await loadPosts();
 ---
 <Base title="Wissenswertes" current="wissenswertes">

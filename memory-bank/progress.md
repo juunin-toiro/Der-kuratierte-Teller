@@ -43,3 +43,8 @@
 - [x] `.pages.yml` extended (posts, quellen, seiten) — still untested in the CMS. Build: 8 pages OK.
 - [ ] Placeholders to replace: intro text on start page, first post (`src/posts/platzhalter-erster-beitrag.md`), source (`src/quellen/platzhalter-quelle.md`). Series/Kategorie landing pages for posts not built. Inline footnote markers are not automatic.
 - [ ] Not checked: visual result in the browser, contrast, keyboard.
+
+## 2026-11-12 — TypeScript migration, deploy
+- [x] GitHub Pages deploy ran green; live at https://juunin-toiro.github.io/Der-kuratierte-Teller/ (links, images, font checked).
+- [x] JS -> TS (D-010). `npm run check`: 0 errors; build 8 pages; filters and calculator re-tested in the browser. Bee image no longer distorted (object-fit: contain).
+- [ ] Not yet: `check` in the deploy workflow; Pages CMS test.

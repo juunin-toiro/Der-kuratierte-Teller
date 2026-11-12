@@ -2,8 +2,8 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Quellen from '../../components/Quellen.astro';
-import { loadPosts } from '../../lib/posts.js';
-import { url } from '../../lib/url.js';
+import { loadPosts } from '../../lib/posts';
+import { url } from '../../lib/url';
 export async function getStaticPaths() {
   return (await loadPosts()).map((p) => ({ params: { slug: p.slug }, props: { p } }));
 }

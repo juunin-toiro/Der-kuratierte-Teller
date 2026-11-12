@@ -4,6 +4,6 @@ import { getCollection } from 'astro:content';
 export async function loadPosts() {
   const posts = await getCollection('posts');
   return posts
-    .sort((a, b) => b.data.datum - a.data.datum)
+    .sort((a, b) => b.data.datum.getTime() - a.data.datum.getTime())
     .map((p) => ({ slug: p.id, entry: p, ...p.data }));
 }

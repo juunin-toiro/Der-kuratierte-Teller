@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+interface Props { titel?: string[] }
 const { titel = [] } = Astro.props;
 const alle = await getCollection('quellen');
 const liste = titel.map((t) => {
