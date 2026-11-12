@@ -12,7 +12,7 @@
 /* Bee */
 .bee { display: block; width: 64px; height: 64px; margin: var(--gap) auto; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .8s; }
 .bee:hover, .bee:focus-visible { transform: rotate(180deg); }
-.bee svg { width: 100%; height: 100%; }
+.bee svg, .bee img { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 /* Filters: Reihe 1 Einfachauswahl, Reihe 2 Mehrfachauswahl, Reihe 3 Kategorie-Dropdown */
 .filters { display: grid; gap: .75rem; margin-bottom: var(--gap); }
