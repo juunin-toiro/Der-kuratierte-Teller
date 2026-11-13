@@ -5,7 +5,7 @@ import '../css/base/base.css';
 import '../css/components.css';
 import '../css/calculator.css';
 import { url } from '../lib/url';
-const { title, current = '' } = Astro.props;
+const { title, current = '', tone } = Astro.props;
 const full = title === 'Der kuratierte Teller' ? title : `${title} – Der kuratierte Teller`;
 const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezepte'], ['wissenswertes', url('/wissenswertes/'), 'Wissenswertes'], ['about', url('/about/'), 'About']];
 ---
@@ -23,7 +23,7 @@ const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezept
     <meta name="theme-color" content="#FAF7F1" />
     <link rel="preload" href={url('/assets/fonts/Leggibilmente.woff2')} as="font" type="font/woff2" crossorigin />
   </head>
-  <body>
+  <body class={tone ? `tone-${tone}` : undefined}>
     <a class="skip" href="#main">Zum Inhalt springen</a>
     <header class="wrap">
       <nav class="nav" aria-label="Hauptnavigation">
@@ -31,6 +31,16 @@ const links = [['home', url('/'), 'Home'], ['rezepte', url('/#rezepte'), 'Rezept
       </nav>
     </header>
     <main id="main" class="wrap"><slot /></main>
-    <footer class="wrap site-footer"><a href={url('/quellen/')}>Quellen</a></footer>
+    <footer class="wrap">
+      <div class="site-footer">
+        <p class="foot-brand">Der kuratierte Teller</p>
+        <p class="foot-tag">Bunte Ernährung für Bewusste, Bewegte &amp; Beschäftigte</p>
+        <nav class="foot-nav" aria-label="Fussnavigation">
+          {links.slice(1).map(([, href, label]) => <a href={href}>{label}</a>)}
+          <a href={url('/quellen/')}>Quellenverzeichnis</a>
+        </nav>
+        <p class="foot-copy">© {new Date().getFullYear()} Der kuratierte Teller</p>
+      </div>
+    </footer>
   </body>
 </html>

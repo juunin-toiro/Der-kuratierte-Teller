@@ -21,7 +21,7 @@
 - [x] Hero (plate image), bee button (scrolls to calculator and focuses it), favicon set + manifest from user files. Nav: Home, Rezepte, Kalkulatoren (Wissenswertes/About pages do not exist yet).
 - [x] Leggibilmente is now one `Leggibilmente.woff2` (weight axis verified in browser: 400/500/700 differ; no real italic, browser synthesizes it).
 - [x] Smart-Fuel Rechner (glycemic load per portion), heading in ink. Bands <=10 / 11-19 / >=20 are the standard GL bands.
-- [ ] OPEN: `src/data/foods.json` holds ONE entry from the user's screenshot (GL 19.0/100 g, no source). Needs real food data (GI, carbs, source) and the recommendation rule (protein/fat scaling is an assumption: linear per 100 g).
+- [x] `foods.json` placeholder replaced by `lebensmittel.json` (Excel import, 1331 foods), see D-008.
 - [ ] Contrast and keyboard checks still pending.
 
 ## 2026-11-12 — Step 1 and 2 of plan (recipe model, filters, CMS config)

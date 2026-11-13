@@ -16,6 +16,8 @@ const recipes = defineCollection({
       eigenschaften: z.array(z.enum(manuell)).default([]),
       // Pages CMS speichert den Titel der Kategorie; loadRecipes ordnet ihn dem Kategorie-Eintrag zu.
       kategorien: z.array(z.string()).default([]),
+      // Kurzbezeichnung je Zubereitungsschritt für die "Rezeptkarte" (z. B. schmelzen, mischen, backen).
+      kompakt: z.array(z.string()).default([]),
       gesamtzeit: z.number().int().positive(),
       aktivzeit: z.number().int().positive().optional(),
       portionen: z.number().int().positive(),
@@ -43,7 +45,7 @@ const quellen = defineCollection({
     title: z.string().min(1),
     autor: z.string().optional(),
     jahr: z.number().int().optional(),
-    link: z.string().url().optional(),
+    link: z.url().optional(),
   }),
 });
 

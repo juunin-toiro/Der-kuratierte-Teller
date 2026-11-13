@@ -1,0 +1,5 @@
+---
+interface Props { q: { title: string; link?: string; autor?: string; jahr?: number | string } }
+const { q } = Astro.props;
+---
+<li>{q.link ? <a href={q.link}>{q.title}</a> : q.title}{q.autor && `, ${q.autor}`}{q.jahr && ` (${q.jahr})`}</li>

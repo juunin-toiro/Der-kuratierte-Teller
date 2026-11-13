@@ -1,7 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-interface Props { titel?: string[] }
-const { titel = [] } = Astro.props;
+import QuelleItem from './QuelleItem.astro';
+interface Props { titel?: string[]; class?: string }
+const { titel = [], class: cls } = Astro.props;
 const alle = await getCollection('quellen');
 const liste = titel.map((t) => {
   const q = alle.find((x) => x.data.title === t);
@@ -10,11 +11,11 @@ const liste = titel.map((t) => {
 });
 ---
 {liste.length > 0 && (
-  <section aria-labelledby="quellen-h">
+  <section class={cls} aria-labelledby="quellen-h">
     <h2 id="quellen-h">Quellen</h2>
     <ol>
       {liste.map((q) => (
-        <li>{q.link ? <a href={q.link}>{q.title}</a> : q.title}{q.autor && `, ${q.autor}`}{q.jahr && ` (${q.jahr})`}</li>
+        <QuelleItem q={q} />
       ))}
     </ol>
   </section>

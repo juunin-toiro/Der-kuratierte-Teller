@@ -3,6 +3,7 @@ title: Skyr-Beeren-Bowl
 geschmack: suess
 eigenschaften: [proteinreich, glutenfrei, vegetarisch]
 kategorien: [Joghurt-Bowls]
+kompakt: [füllen, toppen]
 gesamtzeit: 5
 portionen: 1
 ---

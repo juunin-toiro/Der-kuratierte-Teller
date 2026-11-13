@@ -26,7 +26,7 @@ Text only ink on light surfaces or bg on ink. No colored text in accent/green/or
 - `--gap`: 1.5rem default, 2rem from 576px, 3rem from 992px.
 
 ## Components
-- Hex recipe card: no photo; ink surface, centered bg title/tags. Chip border colours (UPDATED 2026-11-12, D-007): green for Ernährung (proteinreich, low-carb, vegetarisch); orange for Verträglichkeit (laktosefrei, glutenfrei); accent for Zeit (schnell). Group name is also given as screen-reader text; never rely on border colour alone.
+- Hex recipe card: no photo; ink surface, centered bg title/tags. Chip border colours (UPDATED 2026-11-12, D-007): green for Ernährung (proteinreich, low-carb, vegetarisch); orange for Verträglichkeit (glutenfrei); accent for Zeit (schnell). Group name is also given as screen-reader text; never rely on border colour alone.
 - Navigation: ink, active/hover bold with 3px accent underline.
 - Bee: 64px centered; hover rotation 180 degrees over 0.8s; scroll to calculator. Also support keyboard activation and reduced motion.
 - Filters: inactive bg + 1.5px ink border; hover yellow-white; active ink/bg. Expose active state semantically.
@@ -38,3 +38,14 @@ Text only ink on light surfaces or bg on ink. No colored text in accent/green/or
 
 ## Implementation note
 Prefer CSS custom properties, reusable components and semantic markup. Never add arbitrary hard-coded hex values.
+
+## Abstands-Schema
+Alle Abstände leiten sich von `--gap` ab (fluid: 1.5 / 2 / 3 rem, siehe `variables.css`). Keine Einzelwerte in Komponenten, nur diese Stufen:
+
+| Token | Wert | Verwendung |
+|---|---|---|
+| `--space-1` | gap / 2 | Block zu Block: Bento-Karten, Beitragsliste |
+| `--space-2` | gap | Gruppe: Überschrift zu Inhalt, Filter zu Liste, Seitenrand |
+| `--space-3` | gap × 2 | Abschnitt zu Abschnitt: Rechner, Beiträge, Footer-Abstand |
+| `--pad-card` | clamp(1.25rem, 2.5vw, 2rem) | Innenabstand Karten |
+| `--line-s` / `--line-m` | .5rem / 1rem | Zeilen-, Chip- und Listenabstände innerhalb eines Blocks |

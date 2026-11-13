@@ -1,43 +1,118 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import TagList from '../../components/TagList.astro';
 import Quellen from '../../components/Quellen.astro';
-import { loadRecipes, tagBySlug, geschmackName } from '../../lib/recipes';
+import platzhalter from '../../assets/hero-plate.webp';
+import { loadRecipes } from '../../lib/recipes';
 import { url } from '../../lib/url';
+import { glStufe, zahl } from '../../lib/gl';
 export async function getStaticPaths() {
   return (await loadRecipes()).map((r) => ({ params: { slug: r.slug }, props: { r } }));
 }
 const { r } = Astro.props;
+const { rows, cols } = r.compact;
+const stufen = cols.length;
+// Zeile i: Die Zutatenzelle reicht bis zur ersten Schrittspalte, die diese Zeile belegt; dahinter bleiben freie Spalten als Füllzellen.
+const belegt = (c: { start: number; end: number }, i: number) => c.start <= i && i <= c.end;
+// Spaltenzuteilung: Parallele Schritte (Zeilenbereiche überschneiden sich nicht) teilen sich eine Spalte, untereinander.
+const spalten: (typeof cols)[] = [];
+const spalte = cols.map((c) => {
+  let j = spalten.findLastIndex((s) => s.every((o) => o.end < c.start || o.start > c.end));
+  if (j < 0) j = spalten.push([]) - 1;
+  spalten[j].push(c);
+  return j;
+});
+const m = spalten.length;
+const laenge = Math.max(...cols.map((c) => c.label.length));
+const dlaenge = Math.max(1, ...cols.flatMap((c) => c.detail.map((d) => d.length)));
+const erste = (i: number) => Math.min(m, ...cols.flatMap((c, k) => (belegt(c, i) ? [spalte[k]] : [])));
+const spalteBelegt = (j: number, i: number) => spalten[j].some((c) => belegt(c, i));
+const nw = r.naehrwerte;
+const bild = r.bild ?? { datei: platzhalter, alt: '' };
 ---
-<Base title={r.title} current="rezepte">
-  <div class="page">
-    <p><a href={url('/#rezepte')}>← Alle Rezepte</a></p>
-    <h1>{r.title}</h1>
-    <ul class="meta">
-      <li>Portionen: {r.portionen}</li>
-      <li>Gesamtzeit: {r.gesamtzeit} Min.</li>
-      {r.aktivzeit && <li>Aktive Zeit: {r.aktivzeit} Min.</li>}
-      <li>{geschmackName[r.geschmack]}</li>
-    </ul>
-    <ul class="tags" style="justify-content:flex-start">
-      {r.eigenschaften.map((s) => <li class={`tag tag-${tagBySlug[s].farbe}`}>{tagBySlug[s].name}<span class="sr-only"> ({tagBySlug[s].gruppe})</span></li>)}
-    </ul>
-    {r.kategorien.length > 0 && <p>Kategorie: {r.kategorien.map((k) => k.title).join(', ')}</p>}
+<Base title={r.title} current="rezepte" tone={r.farbe}>
+  <div class="page bento recipe">
+    <header class="card wide recipe-head">
+      <div class="recipe-head-text">
+        <p><a href={url('/#rezepte')}>← Alle Rezepte</a></p>
+        <h1>{r.title}</h1>
+        <ul class="meta">
+          <li>Portionen: <b>{r.portionen}</b></li>
+          <li>Gesamtzeit: <b>{r.gesamtzeit} Min.</b></li>
+          {r.aktivzeit && <li>Aktive Zeit: <b>{r.aktivzeit} Min.</b></li>}
+        </ul>
+        <TagList slugs={r.eigenschaften} style="justify-content:flex-start" />
+        {r.kategorien.length > 0 && <p>Kategorie: {r.kategorien.map((k) => k.title).join(', ')}</p>}
+      </div>
+      <Image class="recipe-img" src={bild.datei} alt={bild.alt} width={720} loading="eager" />
+    </header>
 
-    <h2>Zutaten</h2>
-    <div class="table-scroll">
-      <table class="recipe-table">
-        <caption class="sr-only">Zutaten für {r.portionen} Portion(en)</caption>
-        <thead><tr><th scope="col">Menge</th><th scope="col">Einheit</th><th scope="col">Zutat</th></tr></thead>
-        <tbody>
-          {r.ingredients.map((i) => <tr><td>{i.amount}</td><td>{i.unit}</td><th scope="row">{i.name}{i.note && `, ${i.note}`}</th></tr>)}
-        </tbody>
-      </table>
-    </div>
+    <section class="wide karte" aria-labelledby="kompakt-h">
+      <h2 id="kompakt-h" class="section-h">Rezeptkarte</h2>
+      <div class="compact" role="group" aria-label="Zutaten in der Reihenfolge der Verwendung, rechts die jeweiligen Arbeitsschritte" style={`--n:${stufen};--m:${m};--len:${laenge};--dlen:${dlaenge}`}>
+        {rows.map((z, i) => {
+          const f = erste(i);
+          return (
+            <>
+              <div class={`c-zutat r${i % 2}`} style={`grid-row:${i + 1};grid-column:1 / span ${1 + f}`}><b>{z.menge}</b> <span>{z.name}</span></div>
+              {spalten.map((_, j) => j > f && !spalteBelegt(j, i) && <div class={`c-leer r${i % 2}`} style={`grid-row:${i + 1};grid-column:${j + 2}`} />)}
+            </>
+          );
+        })}
+        {cols.map((c, k) => <div class={`c-schritt${stufen > 1 && k / (stufen - 1) >= 0.66 ? ' dunkel' : ''}`} style={`grid-row:${c.start + 1} / ${c.end + 2};grid-column:${spalte[k] + 2};--s:${k + 1}`}>
+          <span class="c-name">{c.label}</span>
+          {c.detail.length > 0 && <span class="c-detail">{c.detail.map((d) => <span>{d}</span>)}</span>}
+        </div>)}
+      </div>
+    </section>
 
-    {r.cookware.length > 0 && <p><strong>Geräte:</strong> {r.cookware.join(', ')}</p>}
+    <section class="card" aria-labelledby="zutaten-h">
+      <h2 id="zutaten-h">Zutaten</h2>
+      <div class="table-scroll">
+        <table class="recipe-table">
+          <caption class="sr-only">Zutaten für {r.portionen} Portion(en)</caption>
+          <thead><tr><th scope="col">Menge</th><th scope="col">Zutat</th></tr></thead>
+          <tbody>
+            {r.ingredients.map((i) => <tr><td>{[i.amount, i.unit].filter(Boolean).join(' ')}{i.gramm && <span class="gramm"> ({i.gramm})</span>}</td><th scope="row">{i.name}{i.note && `, ${i.note}`}</th></tr>)}
+          </tbody>
+        </table>
+      </div>
+      {r.cookware.length > 0 && <p><strong>Geräte:</strong> {r.cookware.join(', ')}</p>}
+    </section>
 
-    <h2>Zubereitung</h2>
-    <ol class="steps">{r.steps.map((s) => <li>{s}</li>)}</ol>
-    <Quellen titel={r.quellen} />
+    <section class="card" aria-labelledby="zub-h">
+      <h2 id="zub-h">Zubereitung</h2>
+      <ol class="steps">
+        {r.steps.map((s, k) => (
+          <li>
+            <span class="nr">{k + 1}</span>
+            <div>
+              <p>{s.teile.map((t) => (t.art === 'text' ? t.text : <span class={`hl hl-${t.art}`}>{t.text}</span>))}</p>
+              {s.mengen.length > 0 && <p class="mengen">{s.mengen.map((m) => `${m.name}: ${m.menge}`).join(', ')}</p>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="card wide" aria-labelledby="nw-h">
+      <h2 id="nw-h">Nährwerte pro Portion</h2>
+      <div class="table-scroll">
+        <table class="recipe-table">
+          <caption class="sr-only">Nährwerte pro Portion, berechnet aus den Zutaten</caption>
+          <tbody>
+            <tr><td>{zahl(nw.kcal, 0)} kcal</td><th scope="row">Energie</th></tr>
+            <tr><td>{zahl(nw.protein)} g</td><th scope="row">Eiweiss</th></tr>
+            <tr><td>{zahl(nw.fett)} g</td><th scope="row">Fett</th></tr>
+            <tr><td>{zahl(nw.kh)} g</td><th scope="row">Kohlenhydrate (verfügbar)</th></tr>
+            <tr><td>{zahl(nw.gl)}</td><th scope="row">Glykämische Last, {glStufe(nw.gl)}</th></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="gramm">Orientierungswerte aus der Schweizer Nährwertdatenbank, gerechnet aus den Zutaten{nw.ohne.length > 0 && ` (ohne ${nw.ohne.join(', ')})`}. Keine individuelle Blutzuckervorhersage.</p>
+    </section>
+
+    <Quellen class="card wide" titel={r.quellen} />
   </div>
 </Base>

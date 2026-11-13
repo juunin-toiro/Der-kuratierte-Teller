@@ -1,9 +1,8 @@
-.calc { margin-block: calc(var(--gap) * 2); }
 .calc-fields { display: flex; flex-wrap: wrap; gap: var(--gap); }
 .calc-field { display: flex; flex-direction: column; gap: .35rem; flex: 1 1 12rem; }
 .calc-field.narrow { flex: 0 1 8rem; }
 .calc-field label { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.calc-field select, .calc-field input { font: inherit; padding: .6rem .75rem; background: var(--ink); color: var(--bg-color); border: 2px solid var(--ink); border-radius: 0; }
+.calc-field select, .calc-field input { font: inherit; padding: .6rem .75rem; background: var(--ink); color: var(--bg-color); border: 2px solid var(--ink); border-radius: .9rem; }
 .calc-field select:focus-visible, .calc-field input:focus-visible { outline-color: var(--accent-color); outline-offset: 2px; box-shadow: 0 0 0 5px var(--ink); }
 .gauge { display: block; width: min(100%, 16rem); margin: var(--gap) auto 0; }
 .gauge .track { fill: none; stroke: var(--stardust); stroke-width: 14; stroke-linecap: round; opacity: .5; }

@@ -10,7 +10,16 @@
   --f-family: "Leggibilmente", system-ui, sans-serif;
   --f-heading: "Aleo", Georgia, serif;
 
+  /* Abstands-Schema: --gap = Basis (fluid, siehe unten). Ebenen: --space-1 Block zu Block (Karten, Listeneinträge), --space-2 Gruppe (Überschrift/Abschnittsinhalt), --space-3 Abschnitt zu Abschnitt. --pad-card = Innenabstand Karten. --line-s/--line-m = Zeilen- und Chip-Abstände innerhalb von Blöcken. */
   --gap: 1.5rem;
+  --space-1: calc(var(--gap) / 2);
+  --space-2: var(--gap);
+  --space-3: calc(var(--gap) * 2);
+  --pad-card: clamp(1.25rem, 2.5vw, 2rem);
+  --line-s: .5rem;
+  --line-m: 1rem;
+  --r: 1.5rem;
+  --card: color-mix(in srgb, var(--yellow-white) 40%, var(--bg-color));
 }
 @media (min-width: 576px) { :root { --gap: 2rem; } }
 @media (min-width: 992px) { :root { --gap: 3rem; } }

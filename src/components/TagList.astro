@@ -1,0 +1,8 @@
+---
+import { tagBySlug } from '../lib/recipes';
+interface Props { slugs: string[]; style?: string }
+const { slugs, style } = Astro.props;
+---
+<ul class="tags" style={style}>
+  {slugs.map((s) => <li class={`tag tag-${tagBySlug[s].farbe}`}>{tagBySlug[s].name}<span class="sr-only"> ({tagBySlug[s].gruppe})</span></li>)}
+</ul>

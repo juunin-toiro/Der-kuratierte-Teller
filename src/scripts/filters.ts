@@ -1,6 +1,5 @@
 // Filter: Geschmack = eine Wahl, Eigenschaften = alle gewählten (UND), Kategorien = eine davon (ODER).
-export {};
-const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+import { el } from './dom';
 const bar = el('filters');
 const list = el('list');
 const items = [...list.children] as HTMLElement[];

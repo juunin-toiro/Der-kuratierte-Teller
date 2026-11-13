@@ -4,7 +4,6 @@
     { "slug": "herzhaft", "name": "herzhaft" }
   ],
   "eigenschaften": [
-    { "slug": "laktosefrei", "name": "laktosefrei", "gruppe": "Verträglichkeit", "farbe": "orange" },
     { "slug": "proteinreich", "name": "proteinreich", "gruppe": "Ernährung", "farbe": "green" },
     { "slug": "low-carb", "name": "low-carb", "gruppe": "Ernährung", "farbe": "green" },
     { "slug": "schnell", "name": "schnell", "gruppe": "Zeit", "farbe": "accent", "automatisch": true },

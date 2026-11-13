@@ -1,71 +1,176 @@
 /* Navigation */
-.nav { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: center; font-family: var(--f-heading); }
+:root { --nav-fs: clamp(.9rem, .6rem + 1.2vw, 1.25rem); --nav-h: calc(var(--nav-fs) * 1.6 + .5rem + 3px + 2 * var(--gap)); }
+.nav { display: flex; flex-wrap: wrap; justify-content: center; gap: calc(var(--gap) * .75); align-items: center; font-family: var(--f-heading); font-size: var(--nav-fs); }
 .nav a { text-decoration: none; padding-block: .25rem; border-bottom: 3px solid transparent; }
 .nav a:hover, .nav a[aria-current="page"] { font-weight: 700; border-bottom-color: var(--accent-color); }
-
-/* Hero */
-.hero { text-align: center; }
-.hero-img { max-width: 100%; height: auto; margin: var(--gap) auto; display: block; }
-.hero h1 { font-size: clamp(2.5rem, 8vw, 4rem); }
-.lead { font-size: 1.25rem; letter-spacing: .03em; }
+/* Hero: alle Grössen leiten sich aus --t (Titelgrösse) ab, die mit dem Viewport skaliert; Teller ~ Titelbreite */
+.hero { --t: clamp(2rem, min(7.5vw, 8svh), 9rem); text-align: center; margin-top: calc(var(--gap) * -2); min-height: calc(100svh - var(--nav-h) + var(--gap)); box-sizing: border-box; padding: calc(var(--t) * .3) 0 calc(var(--gap) / 2); display: flex; flex-direction: column; align-items: center; gap: calc(var(--t) * .3); }
+/* auto-Ränder verteilen den freien Platz gleich auf: Nav→Teller, Teller→Titel, Untertitel→Biene */
+.hero-img { width: calc(var(--t) * 5.4); max-width: 100%; height: auto; margin: auto 0; }
+.hero h1 { font-size: var(--t); margin: 0; }
+.lead { font-size: calc(var(--t) * .4); letter-spacing: .1em; text-transform: uppercase; margin: 0; }
 
 /* Bee */
-.bee { display: block; width: 64px; height: 64px; margin: var(--gap) auto; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .8s; }
+.bee { flex: none; display: block; margin-top: auto; width: calc(var(--t, 3rem) * 1.1); aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; transition: transform .8s; }
 .bee:hover, .bee:focus-visible { transform: rotate(180deg); }
-.bee svg, .bee img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.bee img { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 /* Filters: Reihe 1 Einfachauswahl, Reihe 2 Mehrfachauswahl, Reihe 3 Kategorie-Dropdown */
-.filters { display: grid; gap: .75rem; margin-bottom: var(--gap); }
+.filters { display: grid; gap: .75rem; margin-bottom: var(--space-2); }
 .filters[hidden] { display: none; }
-.filter-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 0; padding: 0; border: 0; }
-.filter { font: inherit; font-family: var(--f-heading); cursor: pointer; border-radius: .5rem; padding: .5rem 1rem; background: var(--bg-color); color: var(--ink); border: 1.5px solid var(--ink); }
-.filter:hover { background: var(--yellow-white); text-decoration: underline; }
+.filter-row { display: flex; flex-wrap: wrap; gap: var(--line-s); align-items: center; margin: 0; padding: 0; border: 0; }
+.filter { font: inherit; font-family: var(--f-heading); cursor: pointer; border-radius: 1rem; padding: .5rem 1rem; background: var(--bg-color); color: var(--ink); border: 1.5px solid var(--ink); transition: transform .15s; }
+.filter:hover { transform: scale(1.06); }
+.filter:hover:not([aria-pressed="true"]) { background: var(--hover, var(--yellow-white)); }
 .filter[aria-pressed="true"] { background: var(--ink); color: var(--bg-color); }
-.filter[class*="c-"]::before { content: ""; display: inline-block; width: .65rem; height: .65rem; margin-right: .5rem; border-radius: 50%; border: 1.5px solid currentColor; background: var(--dot); }
-.filter.c-green { --dot: var(--green); }
-.filter.c-orange { --dot: var(--orange); }
-.filter.c-accent { --dot: var(--accent-color); }
+/* Hover-Farbe = Filterfarbe, auf 60 % aufgehellt, damit dunkler Text mindestens 4,5 : 1 Kontrast behält */
+.filter.c-green { --c: var(--green); }
+.filter.c-orange { --c: var(--orange); }
+.filter.c-accent { --c: var(--accent-color); }
+.filter[class*="c-"] { --hover: color-mix(in srgb, var(--c) 60%, var(--bg-color)); }
 .dropdown { position: relative; }
 .dropdown summary { list-style: none; display: inline-block; }
 .dropdown summary::-webkit-details-marker { display: none; }
 .dropdown summary::after { content: " ▾"; }
 .dropdown[open] summary { background: var(--ink); color: var(--bg-color); }
-.dropdown-panel { position: absolute; z-index: 5; top: calc(100% + .25rem); left: 0; min-width: 14rem; margin: 0; padding: .75rem 1rem; background: var(--bg-color); border: 1.5px solid var(--ink); border-radius: .5rem; display: grid; gap: .35rem; }
-.dropdown-panel label { display: flex; gap: .5rem; align-items: center; cursor: pointer; }
+.dropdown-panel { position: absolute; z-index: 5; top: calc(100% + .25rem); left: 0; min-width: 14rem; margin: 0; padding: .75rem 1rem; background: var(--bg-color); border: 1.5px solid var(--ink); border-radius: 1rem; display: grid; gap: .35rem; }
+.dropdown-panel label { display: flex; gap: var(--line-s); align-items: center; cursor: pointer; }
 .dropdown-panel input { width: 1.1rem; height: 1.1rem; accent-color: var(--ink); }
 .reset { background: none; border: 0; font: inherit; text-decoration: underline; cursor: pointer; padding: .5rem; color: var(--ink); }
 
-/* Hex-Wabenraster. Spaltenzahl --cols je Breite; jede zweite Reihe ist per Skript um eine halbe Zelle versetzt. */
-.honeycomb { --cols: 2; --cell: calc((100% - (var(--cols) - 1) * var(--gap)) / (var(--cols) + .5)); list-style: none; margin: 0; padding: 0 calc(var(--cell) / 2) 0 0; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); row-gap: 0; }
-@media (min-width: 480px) { .honeycomb { --cols: 3; } }
-.hex-wrap { margin-bottom: calc(var(--cell) * -.2887 + var(--gap) * .5); }
+/* Hex-Wabenraster (Spitze oben). Jede Zelle behält ihr Seitenverhältnis 1 : 1,1547; alles Innere skaliert mit der Zellbreite (cqw).
+   Gerade/ungerade Reihen sind um eine halbe Zelle versetzt (Skript setzt .row-odd), Reihenabstand = (Zelle + Fuge) * 0,866 -> echtes Bienenwabenmuster. */
+.honeycomb { --cols: 2; --hg: clamp(.2rem, .9vw, .6rem); list-style: none; margin: 0; padding: 0 0 calc(28.87% / (var(--cols) + .5)); display: grid; grid-template-columns: repeat(var(--cols), calc((100% - (var(--cols) - .5) * var(--hg)) / (var(--cols) + .5))); column-gap: var(--hg); row-gap: 0; }
+@media (min-width: 700px) { .honeycomb { --cols: 3; } }
+.hex-wrap { container-type: inline-size; margin-bottom: calc(-28.87% + var(--hg) * .866); }
 .hex-wrap[hidden] { display: none; }
-.hex-wrap.row-odd { transform: translateX(calc(50% + var(--gap) / 2)); }
+.hex-wrap.row-odd { transform: translateX(calc(50% + var(--hg) / 2)); }
 .hex-wrap:focus-within { filter: drop-shadow(0 0 2px var(--accent-color)) drop-shadow(0 0 2px var(--accent-color)) drop-shadow(0 0 2px var(--accent-color)); }
-.hex { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; aspect-ratio: 1 / 1.1547; padding: 18% 12%; text-align: center; background: var(--ink); color: var(--bg-color); text-decoration: none; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); outline: none; }
-.hex h3 { font-size: clamp(.95rem, 2.4vw, 1.35rem); margin: 0; overflow-wrap: anywhere; hyphens: auto; }
-.hex:hover h3, .hex:focus-visible h3 { text-decoration: underline 3px var(--accent-color); text-underline-offset: .2em; }
-.hex .time { font-size: .875rem; margin: 0; }
+.hex { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3cqw; aspect-ratio: 1 / 1.1547; overflow: hidden; padding: 20cqw 10cqw; box-sizing: border-box; text-align: center; background: var(--tone, var(--ink)); color: var(--ink); text-decoration: none; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115.47'%3E%3Cpolygon points='50,4.62 96,31.18 96,84.29 50,110.85 4,84.29 4,31.18' stroke='black' stroke-width='8' stroke-linejoin='round' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115.47'%3E%3Cpolygon points='50,4.62 96,31.18 96,84.29 50,110.85 4,84.29 4,31.18' stroke='black' stroke-width='8' stroke-linejoin='round' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; outline: none; }
+.hex h3 { font-size: clamp(.7rem, 8.5cqw, 1.6rem); margin: 0; overflow-wrap: anywhere; hyphens: auto; }
+.hex:hover h3, .hex:focus-visible h3 { text-decoration: underline 3px var(--ink); text-underline-offset: .2em; }
+.hex .time { font-size: clamp(.65rem, 6cqw, 1.1rem); margin: 0; }
+.hex .tags { font-size: clamp(.55rem, 5cqw, .95rem); gap: 1.5cqw; }
+.hex .tag { padding: 0 2.5cqw; border-width: 1.5px; }
+/* In kleinen Zellen nur für Screenreader */
+@container (max-width: 150px) { .hex .tags { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } }
 .empty { text-align: center; margin-block: var(--gap); }
 .tags { display: flex; flex-wrap: wrap; gap: .3rem; justify-content: center; list-style: none; margin: 0; padding: 0; font-size: .8rem; }
-.tag { border: 2px solid var(--bg-color); border-radius: 1rem; padding: 0 .5rem; }
-.tag-orange { border-color: var(--orange); }
-.tag-accent { border-color: var(--accent-color); }
-.tag-green { border-color: var(--green); }
-.page .tag { border-color: var(--ink); }
+.tag { border: 2px solid var(--ink); border-radius: 1rem; padding: 0 .5rem; }
+.recipe .tag-orange { border-color: var(--orange); }
+.recipe .tag-accent { border-color: var(--accent-color); }
+.recipe .tag-green { border-color: var(--green); }
 
 /* Rezeptseite */
 .table-scroll { overflow-x: auto; }
 .recipe-table { border-collapse: collapse; width: 100%; }
 .recipe-table th, .recipe-table td { text-align: left; padding: .5rem .75rem; border-bottom: 1.5px solid var(--ink); }
 .recipe-table th { font-family: var(--f-heading); }
-.steps li { margin-bottom: 1rem; }
-.meta { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--gap); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--line-s); }
+.steps li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--line-m); align-items: start; padding: .75rem var(--line-m); border-radius: calc(var(--r) * .5); background: color-mix(in srgb, var(--tone, var(--ink)) 9%, transparent); }
+.steps p { margin: 0; }
+.nr { display: grid; place-items: center; width: 2rem; aspect-ratio: 1; border-radius: 50%; font-family: var(--f-heading); font-weight: 700; background: color-mix(in srgb, var(--tone, var(--ink)) 35%, transparent); color: var(--tone-dark, var(--ink)); }
+.hl { font-weight: 700; }
+.hl-zutat { color: var(--tone-dark, var(--ink)); }
+.hl-geraet { border-bottom: 1.5px dotted currentColor; }
+.hl-zeit { padding: 0 .4em; border-radius: .5em; background: color-mix(in srgb, var(--tone, var(--ink)) 28%, transparent); }
+.mengen { margin-top: .4rem !important; padding-left: .6rem; border-left: 3px solid var(--tone, var(--ink)); font-size: .85em; opacity: .85; }
+.gramm { font-size: .85em; opacity: .8; }
+.meta { list-style: none; padding: 0; display: flex; flex-wrap: nowrap; white-space: nowrap; gap: min(var(--gap), 2.5vw); font-size: min(1em, 2.8vw); }
 
 /* Beiträge, Einstiegstext, Footer */
-.intro { text-align: center; max-width: 40rem; margin-inline: auto; }
-.posts { list-style: none; margin: 0 0 var(--gap); padding: 0; display: grid; gap: var(--gap); }
+.intro { margin-top: var(--gap); text-align: center; max-width: 40rem; margin-inline: auto; }
+.posts { list-style: none; margin: 0 0 var(--gap); padding: 0; display: grid; gap: var(--space-1); }
 .posts h3 { margin: 0; }
 .posts p { margin: .25rem 0 0; }
 .post-kat { font-size: .875rem; font-family: var(--f-heading); }
-.site-footer { margin-block: calc(var(--gap) * 2) var(--gap); }
+
+/* Bento: weiche, leicht organische Kacheln (Rezeptseite, Rechner, Beiträge) */
+.bento { display: grid; gap: var(--space-1); grid-template-columns: minmax(0, 1fr); }
+.card, .calc, .posts li { background: var(--card); padding: var(--pad-card); border-radius: var(--r) calc(var(--r) * .55) var(--r) calc(var(--r) * .55); }
+.bento > :nth-child(even) { border-radius: calc(var(--r) * .55) var(--r) calc(var(--r) * .55) var(--r); }
+.card h1, .card h2 { margin-top: 0; }
+.card > :last-child { margin-bottom: 0; }
+.card .recipe-table th, .card .recipe-table td { border-bottom-color: color-mix(in srgb, var(--ink) 25%, transparent); }
+@media (min-width: 768px) {
+  .bento { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+  .bento > .wide { grid-column: 1 / -1; }
+}
+.posts li:nth-child(even) { border-radius: calc(var(--r) * .55) var(--r) calc(var(--r) * .55) var(--r); }
+.calc { margin-block: var(--space-3); }
+.calc-result { border-top-color: color-mix(in srgb, var(--ink) 25%, transparent); }
+
+/* Abstand Rezepte -> Beiträge; Footer */
+#wissenswertes { margin-top: var(--space-3); }
+.site-footer { background: var(--ink); color: var(--bg-color); text-align: center; display: grid; gap: .5rem; justify-items: center; padding: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem); border-radius: var(--r) calc(var(--r) * .55) var(--r) calc(var(--r) * .55); margin-top: calc(var(--gap) * 2); }
+.site-footer p { margin: 0; }
+.foot-brand { font-family: var(--f-heading); font-size: 1.5rem; font-weight: 700; }
+.foot-tag, .foot-copy { font-size: .875rem; opacity: .8; }
+.foot-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem var(--gap); margin-block: .75rem; font-family: var(--f-heading); }
+.foot-nav a { color: inherit; text-decoration: none; padding-block: .25rem; border-bottom: 3px solid transparent; }
+.foot-nav a:hover, .foot-nav a:focus-visible { border-bottom-color: var(--accent-color); }
+
+/* Rezeptkopf: Bild rechts, ragt nur oben aus der Karte; schmal: zentriert unter dem Text */
+.recipe-head { position: relative; z-index: 1; }
+.recipe-head > .recipe-img { display: block; width: min(80%, 22rem); height: auto; margin: var(--gap) auto calc(var(--gap) * -.3 - var(--pad-card)); object-fit: contain; filter: drop-shadow(0 .6rem .8rem color-mix(in srgb, var(--ink) 25%, transparent)); }
+@media (min-width: 768px) {
+  .recipe-head { padding-right: 42%; }
+  .recipe-head > .recipe-img { position: absolute; right: var(--pad-card); top: calc(var(--gap) * -.8); bottom: var(--pad-card); width: 36%; height: auto; max-height: calc(100% + var(--gap) * .8 - var(--pad-card)); margin: 0; object-position: center; }
+}
+.section-h { margin: var(--space-2) 0 0; text-align: center; }
+.karte .section-h { margin-bottom: var(--space-2); }
+
+/* Rezeptkarte: Zutaten links, Arbeitsschritte als durchgehende Zellen rechts */
+.compact { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(var(--m), minmax(0, 1fr)); width: 100%; border-radius: calc(var(--r) * .5); overflow: hidden; }
+.compact > div { padding: .6rem .9rem; }
+.compact .r0 { background: color-mix(in srgb, var(--tone) 7%, transparent); }
+.compact .r1 { background: color-mix(in srgb, var(--tone) 15%, transparent); }
+.karte { container-type: inline-size; }
+.compact .c-zutat { text-align: left; overflow-wrap: anywhere; }
+.compact .c-zutat b { font-weight: 700; }
+.compact .c-schritt { padding-inline: .4rem; overflow-wrap: anywhere; font-size: clamp(.5rem, (100cqw / (1.5 + var(--m)) - .8rem) / (var(--len) * .8), 1rem); display: flex; flex-direction: column; gap: .2em; align-items: center; justify-content: center; text-align: center; background: color-mix(in srgb, color-mix(in srgb, var(--tone) calc(30% + 50% * (var(--s) - 1) / max(var(--n) - 1, 1)), var(--bg-color)), var(--ink) calc(35% * (var(--s) - 1) / max(var(--n) - 1, 1))); }
+.compact .c-name { font-family: var(--f-heading); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.compact .c-detail { display: flex; flex-direction: column; font-size: min(.85em, (100cqw / (1.5 + var(--m)) - .8rem) / (var(--dlen) * .55)); font-weight: 400; text-transform: none; letter-spacing: 0; }
+.compact .dunkel { color: var(--bg-color); }
+@media (max-width: 600px) {
+  .compact .c-zutat b, .compact .c-zutat span { display: block; }
+  .compact > div { padding: .4rem; font-size: .85rem; }
+}
+/* Schmal: Schrittnamen stehen senkrecht in schmalen Spalten; die Zeilen wachsen mit, nichts ragt über. */
+@container (max-width: 42rem) {
+  .compact { grid-template-columns: minmax(0, 1fr) repeat(var(--m), 2.2rem); }
+  .compact .c-schritt { writing-mode: vertical-rl; transform: rotate(180deg); font-size: .8rem; padding: .5rem .25rem; flex-direction: row; gap: .8em; }
+  .compact .c-detail { flex-direction: row; gap: .8em; font-size: .85em; }
+}
+
+/* Kartenfarbe je Rezept (Filterfarbe der häufigsten Gruppe, schnell = accent) */
+.tone-green { --tone: var(--green); }
+.tone-orange { --tone: var(--orange); }
+.tone-accent { --tone: var(--accent-color); }
+/* Designfarbe der Rezeptfarbe auch in Texten: Mengen, Zahlen, Zwischentitel, Links */
+.recipe { --tone-dark: color-mix(in srgb, var(--tone) 55%, var(--ink)); }
+.recipe .meta b, .recipe .compact .c-zutat b, .recipe .recipe-table td:first-child, .recipe .recipe-head a { color: var(--tone-dark); font-weight: 700; }
+.recipe h2 { color: var(--tone-dark); }
+.recipe .recipe-table th { color: var(--ink); }
+/* Rezeptseite: Hintergrund = Rezeptfarbe, Karten in drei helleren Abstufungen (Kopf am kräftigsten, Quellen am hellsten) */
+body[class*="tone-"] { background: var(--tone); }
+.recipe { --t1: color-mix(in srgb, var(--tone) 50%, var(--bg-color)); --t2: color-mix(in srgb, var(--tone) 32%, var(--bg-color)); --t3: color-mix(in srgb, var(--tone) 18%, var(--bg-color)); }
+.recipe .recipe-head { background: var(--t1); }
+.recipe .card { background: var(--t2); }
+.recipe .card.wide:last-child { background: var(--t3); }
+.recipe .compact { background: var(--t3); }
+.recipe .section-h { color: var(--ink); }
+
+/* Seitenwechsel ohne Aufblitzen: Der Browser hält die alte Ansicht, bis die neue gezeichnet ist (Chrome/Edge/Safari; sonst normaler Wechsel). */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .2s; }
+
+/* Biene zieht beim Öffnen eines Rezepts die Rezeptfarbe von unten über die Seite (Startseite) */
+/* Oberkante wie die obere Hälfte einer Wabe: Spitze in der Mitte, Flanken flacher als die Wabe (Abfall = 50vw * tan 8° ≈ 7vw). */
+.wipe { --peak: 7vw; position: fixed; inset: 0 0 auto 0; height: calc(100dvh + var(--peak)); z-index: 50; pointer-events: none; transform: translateY(calc(100% + 8rem)); }
+.wipe.go { transform: translateY(calc(var(--peak) * -1)); transition: transform 2.2s cubic-bezier(.8, 0, .2, 1); pointer-events: auto; }
+.wipe-page { height: 100%; box-sizing: border-box; padding-top: var(--peak); overflow: hidden; background: var(--wipe, var(--accent-color)); clip-path: polygon(0 var(--peak), 50% 0, 100% var(--peak), 100% 100%, 0 100%); }
+.wipe > img { position: absolute; left: 50%; bottom: 100%; width: 3.5rem; height: 3.5rem; margin: 0 0 -1.17rem -1.75rem; z-index: 1; object-fit: contain; }
+.wipe.go > img { animation: wackeln .9s ease-in-out infinite alternate; }
+@keyframes wackeln { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+

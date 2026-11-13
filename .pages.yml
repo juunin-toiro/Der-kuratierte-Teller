@@ -35,8 +35,6 @@ content:
         options:
           multiple: true
           values:
-            - name: laktosefrei
-              label: laktosefrei
             - name: proteinreich
               label: proteinreich
             - name: low-carb
@@ -60,6 +58,11 @@ content:
       - name: aktivzeit
         label: Aktive Zeit in Minuten (optional)
         type: number
+      - name: kompakt
+        label: Rezeptkarte – ein Verb pro Schritt
+        description: 'Ein Eintrag pro Schritt, gleiche Reihenfolge wie der Text (z. B. mischen, formen, backen). "*" am Ende (mischen*) = eigener Strang nur mit den neuen Zutaten. "|" fügt Zusatzzeilen hinzu und ersetzt die automatische Hitze/Dauer: formen|Klumpen à 80–120 g|andrücken. Nur "rösten|" = ohne Zusatz. Ohne "|" werden °C und Dauer aus dem Text übernommen.'
+        type: string
+        list: true
       - name: portionen
         label: Portionen
         type: number
